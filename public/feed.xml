@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+    <channel>
+        <title>GoodData Dashboard Podcast</title>
+        <link>https://your-username.github.io/dashboard-podcast</link>
+        <description>Your dashboards, now as audio episodes.</description>
+        <docs>http://www.rssboard.org/rss-specification</docs>
+        <generator>python-feedgen</generator>
+        <language>en</language>
+        <lastBuildDate>Fri, 30 May 2025 08:50:34 +0000</lastBuildDate>
+        <item>
+            <title>Dashboard Insights – Feb 18, 2025</title>
+            <description>Insights generated on Tuesday, February 18, 2025</description>
+            <guid isPermaLink="false">podcast_02-18-2025_en.mp3</guid>
+            <enclosure
+                url="https://your-username.github.io/dashboard-podcast/public/podcast/podcast_02-18-2025_en.mp3"
+                length="2140800" type="audio/mpeg" />
+            <pubDate>Tue, 18 Feb 2025 11:58:36 +0000</pubDate>
+        </item>
+        <item>
+            <title>Dashboard Insights – May 30, 2025</title>
+            <description>Insights generated on Friday, May 30, 2025</description>
+            <guid isPermaLink="false">podcast_05-30-2025_en.mp3</guid>
+            <enclosure
+                url="https://your-username.github.io/dashboard-podcast/public/podcast/podcast_05-30-2025_en.mp3"
+                length="1621920" type="audio/mpeg" />
+            <pubDate>Fri, 30 May 2025 10:28:46 +0000</pubDate>
+        </item>
+    </channel>
+</rss>

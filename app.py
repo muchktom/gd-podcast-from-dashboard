@@ -7,6 +7,7 @@ from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 from datetime import datetime
 import io
+from generate_feed import generate_rss_feed
 
 load_dotenv()  # take environment variables from .env.
 
@@ -78,7 +79,7 @@ def describe_dashboard(images, language="en"):
     return outcome.choices[0].message.content
 
 def generate_audio(text, file, voice="alloy"):
-  export_path = Path.cwd() / "output"
+  export_path = Path.cwd() / "public" / "podcast"
   client = OpenAI()
 
   response = client.audio.speech.create(
@@ -129,6 +130,7 @@ def main():
     file_name = f"podcast_{timestamp}_{language}"
     generate_audio(response, file_name)
    # summary = generate_summary(response)
+    generate_rss_feed()
 
 if __name__ == "__main__":
     main()
