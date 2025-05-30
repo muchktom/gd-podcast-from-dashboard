@@ -1,10 +1,9 @@
 import os
-from os.path import basename
 import base64
 from pdf2image import convert_from_path
 from dotenv import load_dotenv
 from openai import OpenAI
-from gooddata_sdk import GoodDataSdk, ExportRequest
+from gooddata_sdk import GoodDataSdk
 from pathlib import Path
 from datetime import datetime
 import io
@@ -12,26 +11,24 @@ import io
 load_dotenv()  # take environment variables from .env.
 
 # GoodData base URL, e.g. "https://www.example.com"
-host = "https://ux-team.internal.cloud.gooddata.com/"
+host = os.environ.get("GOODDATA_ENDPOINT")
 token = os.environ.get("GOODDATA_API_TOKEN")
 sdk = GoodDataSdk.create(host, token)
 
-export_path = Path.cwd() / "out"
-
-def export_dashboard_to_images():
+def export_dashboard_to_images(workspace_id, dashboard_id, export_file_name):
   # Export a dashboard in PDF format
+  export_path = Path.cwd() / "input"
   export_path.mkdir(parents=True, exist_ok=True)
-  EXPORT_FILE_NAME = "test"
   sdk.export.export_pdf(
-    workspace_id = "b8c8f2edcef94acdad5e3380d2154a56",
-    dashboard_id = "ca219ed5-01c5-4b43-bc44-ac8ae4da37d6",
-    file_name = EXPORT_FILE_NAME,
+    workspace_id = workspace_id,
+    dashboard_id = dashboard_id,
+    file_name = export_file_name,
     store_path = export_path,
     metadata = {}
   )
 
   # Convert PDF to images
-  images = convert_from_path(export_path / (EXPORT_FILE_NAME + ".pdf"), dpi=300)  # Change dpi for quality
+  images = convert_from_path(export_path / (export_file_name + ".pdf"), dpi=300)  # Change dpi for quality
   
   image_data = []
   for i, img in enumerate(images):
@@ -45,10 +42,7 @@ def export_dashboard_to_images():
   return image_data  # or `return image_data` if you need base64 strings
 
 def describe_dashboard(images, language="en"):
-    client = OpenAI(
-        # This is the default and can be omitted
-        api_key=os.environ.get("OPENAI_API_KEY"),
-    )
+    client = OpenAI()
 
     message = [
       {
@@ -84,10 +78,8 @@ def describe_dashboard(images, language="en"):
     return outcome.choices[0].message.content
 
 def generate_audio(text, file, voice="alloy"):
-  client = OpenAI(
-      # This is the default and can be omitted
-      api_key=os.environ.get("OPENAI_API_KEY"),
-  )
+  export_path = Path.cwd() / "output"
+  client = OpenAI()
 
   response = client.audio.speech.create(
       model="tts-1",
@@ -97,10 +89,7 @@ def generate_audio(text, file, voice="alloy"):
   response.stream_to_file(export_path / (file+".mp3"))
 
 def generate_summary(text):
-  client = OpenAI(
-      # This is the default and can be omitted
-      api_key=os.environ.get("OPENAI_API_KEY"),
-  )
+  client = OpenAI()
 
   message = [
       {
@@ -130,15 +119,16 @@ def generate_summary(text):
 
 
 def main():
-    images = export_dashboard_to_images()
+    workspace_id = os.environ.get("GOODDATA_WORKSPACE_ID")
+    dashboard_id = os.environ.get("GOODDATA_DASHBOARD_ID")
+    images = export_dashboard_to_images(workspace_id, dashboard_id, "test")
 
     language = "en"
     response = describe_dashboard(images, language)
-
     timestamp = datetime.now().strftime("%m-%d-%Y")
     file_name = f"podcast_{timestamp}_{language}"
     generate_audio(response, file_name)
-    summary = generate_summary(response)
+   # summary = generate_summary(response)
 
 if __name__ == "__main__":
     main()
