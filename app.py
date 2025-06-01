@@ -8,6 +8,7 @@ from pathlib import Path
 from datetime import datetime
 import io
 from generate_feed import generate_rss_feed
+import requests
 
 load_dotenv()  # take environment variables from .env.
 
@@ -99,11 +100,10 @@ def generate_summary(text):
         {
           "type": "text",
           "text": (
-            "Act as a podcaster and data analyst who sends echo about the new podcast episode. "
-            "Generate a brief (1-2 paragraphs) summary of the new podcast episode. " 
-            "The generated text will be included in the e-mail body, " 
-            "don't add subject, format it as an email and name the sender " 
-            "as Paul from GoodData Daily Podcast." 
+            "Act as a podcaster and data analyst who publishes the new podcast episode. "
+            "In the first line, add the title of the episode (e.g. 'June 1, 2025 - Exploring the Dynamic Expansion of LEGO Sets')."
+            "On the second line and following lines, generate a very short and brief description of the new podcast episode. This description will be used in the RSS feed. "
+            "Don't use any markdown formatting."
             f"Text to summarize: {text}"
           ),
         }
@@ -118,24 +118,73 @@ def generate_summary(text):
   return outcome.choices[0].message.content
 
 
+def upload_episode(file_name, path, summary, season_number, episode_number):
+  API_TOKEN = os.getenv("BUZZSPROUT_API_TOKEN")
+  PODCAST_ID = os.getenv("BUZZSPROUT_PODCAST_ID")
+
+  # Endpoint
+  url = f"https://www.buzzsprout.com/api/{PODCAST_ID}/episodes.json?"
+
+
+  # Metadata (customize as needed)
+  data = {
+    "title": summary.split("\n")[0],
+    "description": "\n".join(summary.split("\n")[1:]),
+    "summary": "\n".join(summary.split("\n")[1:]),
+    "artist": "GoodData AI Assistant",
+    "episode_number": episode_number,
+    "season_number": season_number,
+    "explicit": False,
+    "private": False,
+    "published_at": datetime.utcnow().isoformat(),
+    "email_user_after_audio_processed": True,
+    "artwork_url": "https://www.gooddata.com/img/blog/_1200x630/01_21_2022_goodatasociallaunch_rebrand_og.png.webp"
+  }
+
+  headers = {
+    "User-Agent": "Mozilla/5.0 (compatible; BuzzsproutBot/1.0)",
+    "Accept": "application/json",
+    "Authorization": f"Token token={API_TOKEN}"
+  }
+
+  # File upload
+  files = {
+    "audio_file": (os.path.basename(path), open(path, "rb"), "audio/mpeg")
+  }
+
+  # POST request
+  response = requests.post(url, data=data, headers=headers, files=files)
+
+  # Handle response
+  if response.status_code == 201:
+      episode = response.json()
+      print("✅ Episode created:")
+      print(f"🎧 Title: {episode['title']}")
+      print(f"🔗 Link: {episode['audio_url']}")
+  else:
+      print("❌ Failed to create episode")
+      print(response.status_code, response.text)
+
 
 def main():
     workspace_id = os.environ.get("GOODDATA_WORKSPACE_ID")
     dashboard_id = os.environ.get("GOODDATA_DASHBOARD_ID")
     images = export_dashboard_to_images(workspace_id, dashboard_id, "test")
-
     language = "en"
     response = describe_dashboard(images, language)
     timestamp = datetime.now().strftime("%m-%d-%Y")
     file_name = f"podcast_{timestamp}_{language}"
     generate_audio(response, file_name)
     summary = generate_summary(response)
-    # Store the summary as a .txt file next to the audio file
+    path = Path("public") / "podcast" / (file_name + ".mp3")
+    upload_episode(file_name, path, summary, 1, 1)
+    
+    """ # Store the summary as a .txt file next to the audio file
     export_path = Path.cwd() / "public" / "podcast"
     summary_file = export_path / f"{file_name}.txt"
     with open(summary_file, "w", encoding="utf-8") as f:
         f.write(summary)
-    generate_rss_feed()
+    generate_rss_feed() """
 
 if __name__ == "__main__":
     main()
