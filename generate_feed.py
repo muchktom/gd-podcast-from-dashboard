@@ -18,13 +18,22 @@ def generate_rss_feed(site_url="https://your-username.github.io/dashboard-podcas
 
     for file_name in audio_files:
         file_path = os.path.join(audio_dir, file_name)
-        file_url = f"{site_url}/{audio_dir}/{file_name}"
+        file_url = f"https://feeds.soundcloud.com/stream/2105813484-tom-muchka-908203902-{file_name}"
         pub_date = datetime.fromtimestamp(os.path.getmtime(file_path))
+
+        # Try to read description from .txt file
+        base_name = os.path.splitext(file_name)[0]
+        txt_path = os.path.join(audio_dir, base_name + ".txt")
+        if os.path.exists(txt_path):
+            with open(txt_path, "r", encoding="utf-8") as desc_file:
+                description = desc_file.read().strip()
+        else:
+            description = f"Insights generated on {pub_date.strftime('%A, %B %d, %Y')}"
 
         fe = fg.add_entry()
         fe.id(file_name)
         fe.title(f"Dashboard Insights – {pub_date.strftime('%b %d, %Y')}")
-        fe.description(f"Insights generated on {pub_date.strftime('%A, %B %d, %Y')}")
+        fe.description(description)
         fe.enclosure(file_url, str(os.path.getsize(file_path)), 'audio/mpeg')
         fe.pubDate(pub_date.strftime('%a, %d %b %Y %H:%M:%S GMT'))
 

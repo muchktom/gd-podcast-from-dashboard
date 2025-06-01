@@ -129,7 +129,12 @@ def main():
     timestamp = datetime.now().strftime("%m-%d-%Y")
     file_name = f"podcast_{timestamp}_{language}"
     generate_audio(response, file_name)
-   # summary = generate_summary(response)
+    summary = generate_summary(response)
+    # Store the summary as a .txt file next to the audio file
+    export_path = Path.cwd() / "public" / "podcast"
+    summary_file = export_path / f"{file_name}.txt"
+    with open(summary_file, "w", encoding="utf-8") as f:
+        f.write(summary)
     generate_rss_feed()
 
 if __name__ == "__main__":

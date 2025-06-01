@@ -9,24 +9,35 @@
         <docs>http://www.rssboard.org/rss-specification</docs>
         <generator>python-feedgen</generator>
         <language>en</language>
-        <lastBuildDate>Fri, 30 May 2025 08:50:34 +0000</lastBuildDate>
+        <lastBuildDate>Sun, 01 Jun 2025 13:58:46 +0000</lastBuildDate>
         <item>
-            <title>Dashboard Insights – Feb 18, 2025</title>
-            <description>Insights generated on Tuesday, February 18, 2025</description>
-            <guid isPermaLink="false">podcast_02-18-2025_en.mp3</guid>
+            <title>Dashboard Insights – Jun 01, 2025</title>
+            <description>Hello everyone,
+
+                This is Paul from GoodData Daily Podcast, and I'm excited to share insights from our
+                latest episode diving into the dynamic world of building sets. We explore the
+                current market landscape, with a remarkable total of 6,165 sets available, and a
+                notable annual increase, indicating a healthy and expanding collection. Licensed
+                themes are seeing a robust growth rate of 7.4%, outpacing native themes at 6.25%,
+                showcasing the strong market interest in franchised sets. Notably, the "Stranger
+                Things" theme is leading with astonishing annual growth of 22.24%, despite having
+                just three sets, underscoring its high demand.
+
+                Moreover, when examining average prices, "Ghostbusters" tops the chart at $254.99
+                per license, closely followed by "Stranger Things" at $199.99, highlighting their
+                premium status. The episode captures the dynamic and imaginative growth in building
+                sets, driven by diversity and increasing consumer interest. Dive into the details as
+                we continue to build insights and imagination on GoodData Daily. Catch you with more
+                insights tomorrow!
+
+                Best,
+                Paul
+                GoodData Daily Podcast</description>
+            <guid isPermaLink="false">podcast_06-01-2025_en.mp3</guid>
             <enclosure
-                url="https://your-username.github.io/dashboard-podcast/public/podcast/podcast_02-18-2025_en.mp3"
-                length="2140800" type="audio/mpeg" />
-            <pubDate>Tue, 18 Feb 2025 11:58:36 +0000</pubDate>
-        </item>
-        <item>
-            <title>Dashboard Insights – May 30, 2025</title>
-            <description>Insights generated on Friday, May 30, 2025</description>
-            <guid isPermaLink="false">podcast_05-30-2025_en.mp3</guid>
-            <enclosure
-                url="https://your-username.github.io/dashboard-podcast/public/podcast/podcast_05-30-2025_en.mp3"
-                length="1621920" type="audio/mpeg" />
-            <pubDate>Fri, 30 May 2025 10:28:46 +0000</pubDate>
+                url="https://feeds.soundcloud.com/stream/2105813484-tom-muchka-908203902-podcast_06-01-2025_en.mp3"
+                length="1706880" type="audio/mpeg" />
+            <pubDate>Sun, 01 Jun 2025 15:58:41 +0000</pubDate>
         </item>
     </channel>
 </rss>
