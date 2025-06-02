@@ -1,0 +1,36 @@
+name: Daily Run
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Runs every day at 8:00 Czech time (GMT+2)
+  workflow_dispatch:      # Allows you to manually trigger it
+
+jobs:
+  run-python-script:
+    runs-on: ubuntu-latest
+
+    env:
+      GOODDATA_WORKSPACE_ID: ${{ secrets.GOODDATA_WORKSPACE_ID }}
+      GOODDATA_API_TOKEN: ${{ secrets.GOODDATA_API_TOKEN }}
+      GOODDATA_DASHBOARD_ID: ${{ secrets.GOODDATA_DASHBOARD_ID }}
+      GOODDATA_ENDPOINT: ${{ secrets.GOODDATA_ENDPOINT }}
+      BUZZSPROUT_API_TOKEN: ${{ secrets.BUZZSPROUT_API_TOKEN }}
+      BUZZSPROUT_PODCAST_ID: ${{ secrets.BUZZSPROUT_PODCAST_ID }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run script
+        run: |
+          python app.py
