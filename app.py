@@ -25,6 +25,8 @@ def main():
     file_name = f"podcast_{timestamp}_{language}"
     generate_audio(dashboard_as_text, file_name)
     summary = generate_summary(dashboard_as_text)
+    
+    Path("public").mkdir(parents=True, exist_ok=True)
     path = Path("public") / (file_name + ".mp3")
     upload_episode(path, summary, 1, 1)
 
