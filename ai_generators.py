@@ -39,6 +39,7 @@ def describe_dashboard(images, language="en"):
 
 def generate_audio(text, file, voice="alloy"):
     export_path = Path.cwd() / "public"
+    export_path.mkdir(parents=True, exist_ok=True)
     client = OpenAI()
 
     response = client.audio.speech.create(
