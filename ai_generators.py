@@ -61,7 +61,7 @@ def generate_summary(text):
             "text": (
               "Important: Don't use any markdown formatting, just plain text."
               "Act as a podcaster and data analyst who publishes the new podcast episode. "
-              "In the first line, add the title of the episode (e.g. 'June 1, 2025 - Exploring the Dynamic Expansion of LEGO Sets')."
+              "In the first line, add a very short title, just 4-6 words, of the episode (e.g. 'June 1, 2025 - Exploring the Dynamic Expansion of LEGO Sets')."
               "On the second line and following lines, generate a very short and brief description of the new podcast episode. This description will be used in the RSS feed. "
               f"Text to summarize: {text}"
             ),
