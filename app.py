@@ -26,8 +26,9 @@ def main():
     generate_audio(dashboard_as_text, file_name)
     summary = generate_summary(dashboard_as_text)
     
-    Path("public").mkdir(parents=True, exist_ok=True)
-    path = Path("public") / (file_name + ".mp3")
+    export_path = Path.cwd() / "public"
+    export_path.mkdir(parents=True, exist_ok=True)
+    path = export_path.joinpath(f"{file_name}.mp3")
     upload_episode(path, summary, 1, 1)
 
 if __name__ == "__main__":
