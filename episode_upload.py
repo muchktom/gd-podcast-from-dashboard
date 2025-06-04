@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def upload_episode(path, summary, season_number, episode_number):
     API_TOKEN = os.getenv("BUZZSPROUT_API_TOKEN")
@@ -19,7 +19,8 @@ def upload_episode(path, summary, season_number, episode_number):
         "season_number": season_number,
         "explicit": False,
         "private": False,
-        "published_at": datetime.utcnow().isoformat(),
+        
+        "published_at": (datetime.utcnow() + timedelta(hours=1)).isoformat(),
         "email_user_after_audio_processed": True,
         "artwork_url": "https://www.gooddata.com/img/blog/_1200x630/01_21_2022_goodatasociallaunch_rebrand_og.png.webp"
     }
