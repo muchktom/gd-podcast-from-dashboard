@@ -3,7 +3,7 @@ from pdf2image import convert_from_path
 from pathlib import Path
 import io
 
-def export_dashboard_to_images(sdk, workspace_id, dashboard_id, export_file_name):
+def export_dashboard_to_images(sdk, workspace_id, dashboard_id, export_file_name="test"):
     # Export a dashboard in PDF format
     export_path = Path.cwd() / "input"
     export_path.mkdir(parents=True, exist_ok=True)

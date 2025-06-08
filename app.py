@@ -20,14 +20,16 @@ def main():
     language = "en"
     timestamp = datetime.now().strftime("%m-%d-%Y")
     
-    images = export_dashboard_to_images(sdk, workspace_id, dashboard_id, "test")
-    dashboard_as_text = describe_dashboard(images, language)
-    file_name = f"podcast_{timestamp}_{language}"
-    generate_audio(dashboard_as_text, file_name)
-    summary = generate_summary(dashboard_as_text)
+    exported_dashboard = export_dashboard_to_images(sdk, workspace_id, dashboard_id)
     
-    audio_path = Path.cwd() / "public" / f"{file_name}.mp3"
-    upload_episode(audio_path, summary, 1, 1)
+    if exported_dashboard:
+        dashboard_as_text = describe_dashboard(exported_dashboard, language)
+        file_name = f"podcast_{timestamp}_{language}"
+        generate_audio(dashboard_as_text, file_name)
+        summary = generate_summary(dashboard_as_text, timestamp)
+        
+        audio_path = Path.cwd() / "public" / f"{file_name}.mp3"
+        upload_episode(audio_path, summary, 1, 1)
 
 if __name__ == "__main__":
     main()

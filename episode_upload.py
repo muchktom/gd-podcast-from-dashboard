@@ -1,19 +1,23 @@
 import os
 import requests
 from datetime import datetime, timedelta
+import json
 
 def upload_episode(path, summary, season_number, episode_number):
     API_TOKEN = os.getenv("BUZZSPROUT_API_TOKEN")
     PODCAST_ID = os.getenv("BUZZSPROUT_PODCAST_ID")
+    print(summary)
+    summary = json.loads(summary)
+
 
     # Endpoint
     url = f"https://www.buzzsprout.com/api/{PODCAST_ID}/episodes.json?"
 
     # Metadata (customize as needed)
     data = {
-        "title": summary.split("\n")[0],
-        "description": "\n".join(summary.split("\n")[1:]),
-        "summary": "\n".join(summary.split("\n")[1:]),
+        "title": summary["title"],
+        "description": summary["description"],
+        "summary": summary["description"],
         "artist": "GoodData AI Assistant",
         "episode_number": episode_number,
         "season_number": season_number,

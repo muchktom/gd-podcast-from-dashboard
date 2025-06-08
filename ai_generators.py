@@ -1,5 +1,6 @@
 from openai import OpenAI
 from pathlib import Path
+from datetime import datetime
 
 def describe_dashboard(images, language="en"):
     client = OpenAI()
@@ -12,6 +13,8 @@ def describe_dashboard(images, language="en"):
         "type": "text",
         "text": (
           "Act as a data analyst who creates a daily data summary podcast. "
+          "In the attachment there is first a snapshot of the dashboard and then a snapshot of the previous day's dashboard. "
+          "Your task is to describe the current state of the dashboard, but take into account the previous state."
           "Start with the current day and a brief introduction of the dashboard, "
           "then describe the dashboard in a way that is easy to understand for a "
           "non-technical audience. Don't mention there is actually a dashboard or "
@@ -49,7 +52,7 @@ def generate_audio(text, file, voice="alloy"):
     )
     response.stream_to_file(export_path / (file+".mp3"))
 
-def generate_summary(text):
+def generate_summary(text, timestamp):
     client = OpenAI()
 
     message = [
@@ -59,11 +62,13 @@ def generate_summary(text):
           {
             "type": "text",
             "text": (
-              "Important: Don't use any markdown formatting, just plain text."
-              "Act as a podcaster and data analyst who publishes the new podcast episode. "
-              "On the first line generate 6-10 words of the episode title,  (e.g. 'June 1, 2025 - Exploring the Dynamic Expansion of LEGO Sets'). Then do a line separator."
-              "On the second line and following lines, generate a very short and brief description of the new podcast episode. This description will be used in the RSS feed. "
+              "Act as a podcaster and data analyst publishing a new podcast episode. Generate output in JSON format with two fields: 'title' and 'description'."
+              " - 'title' should be a string of 6 to 10 words, following this pattern: '<Month> <Day>, <Year> - <Short Episode Title>' (e.g. 'June 1, 2025 - Exploring the Dynamic Expansion of LEGO Sets')."
+              " - 'description' should be a very short and brief summary of the episode, suitable for RSS feeds."
+              "Important: Output only raw JSON. Do not include any Markdown formatting, code block markers, or extra commentary."
               f"Text to summarize: {text}"
+              f"Current date is: {timestamp}"
+
             ),
           }
         ]
